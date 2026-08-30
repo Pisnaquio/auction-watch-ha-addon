@@ -1,2 +1,0 @@
-[console_scripts]
-auction-watch = auction_watch.main:run
