@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package tracked add-on files
+        run: git archive --format=tar.gz --output=/tmp/auction-watch-addon.tar.gz HEAD:auctionwatch
+      - name: Audit add-on artifact
+        run: python auctionwatch/scripts/audit_addon_artifact.py /tmp/auction-watch-addon.tar.gz
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t auction-watch-addon:ci auctionwatch
