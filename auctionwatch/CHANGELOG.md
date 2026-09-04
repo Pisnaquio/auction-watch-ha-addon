@@ -1,5 +1,51 @@
 # Changelog
 
+## Release status (as of 0.1.16)
+
+El add-on está publicado e instalado en un Home Assistant real, agregado
+como repositorio de Supervisor (no como add-on local). Confirmado en vivo:
+versión `0.1.16` (`update_available: false`), `state: started`,
+`scheduler_enabled: true`. La instalación supervisada que versiones previas
+de esta nota daban como pendiente ya ocurrió.
+
+Verificado además localmente en este entorno de desarrollo (sin Docker
+disponible, complementario a la instalación real, no un sustituto):
+
+- `pytest`, `ruff check .` y `mypy` en verde; `npm test` y `npm run build` del
+  frontend también en verde.
+- `scripts/check_public_safety.py` y el empaquetado (`scripts/package_addon.sh`
+  + `scripts/audit_addon_artifact.py`) pasan sin advertencias.
+- `scripts/validate_addon_options.py` acepta las opciones por defecto de
+  `config.yaml`.
+- Migraciones de Alembic aplicadas de punta a punta contra un `AW_DATA_DIR`
+  nuevo (7 revisiones, sin errores) y el servidor local respondiendo `200` en
+  `/api/v1/health` y `/api/v1/readiness` con la versión `0.1.16`.
+- La imagen base (`ghcr.io/home-assistant/base-python:3.12-alpine3.24` en
+  `build.yaml`/`Dockerfile`) es la oficial y vigente de Home Assistant.
+
+`smtp_enabled` está en `true` en la instalación real, con credenciales de
+Gmail configuradas — a diferencia del default seguro de `config.yaml`
+(`smtp_enabled: false`). Es una elección deliberada post-instalación, no un
+default del proyecto.
+
+## 0.1.17
+
+- Fija la barra lateral a la altura de la ventana: deja de cortarse al
+  desplazar formularios largos y el cambio de perfil queda siempre alcanzable.
+- Agrupa los criterios sueltos en secciones con título e ícono («Términos de
+  búsqueda» y «Alcance»), en línea con las secciones de fuentes y precio.
+- Reemplaza el cuadrado de puntaje de cada oportunidad por un anillo de
+  progreso calculado sobre el puntaje real, y tacha el título de las
+  descartadas.
+- Agrega sobre el espacio de trabajo una franja con la última corrida, la
+  próxima corrida programada y las notificaciones, construida con datos que la
+  interfaz ya tenía y sin endpoints nuevos.
+- Convierte la barra lateral en una barra inferior en pantallas angostas, en
+  lugar de apilar los perfiles como fichas.
+- Incorpora el pipeline de release por tag y las herramientas de versionado
+  (`bump_version.sh`, `tag_release.sh`, `ha_update.sh`); ver
+  [docs/RELEASE.md](docs/RELEASE.md).
+
 ## 0.1.16
 
 - Mantiene el texto crudo de los criterios mientras se edita, permitiendo
@@ -122,7 +168,3 @@
   delivery.
 - Safe installation defaults: no scheduled scans and no SMTP delivery.
 - Artifact packaging and private-data audit scripts.
-
-This release has not been published or deployed.  A release still requires a
-maintainer review of the target Home Assistant base images and a supervised
-installation test in a disposable environment.
