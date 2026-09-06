@@ -1,32 +1,25 @@
 # Changelog
 
-## Release status (as of 0.1.16)
+## Release and deployment
 
-El add-on está publicado e instalado en un Home Assistant real, agregado
-como repositorio de Supervisor (no como add-on local). Confirmado en vivo:
-versión `0.1.16` (`update_available: false`), `state: started`,
-`scheduler_enabled: true`. La instalación supervisada que versiones previas
-de esta nota daban como pendiente ya ocurrió.
+El proceso de publicación, actualización y verificación del add-on está en
+[docs/RELEASE.md](docs/RELEASE.md). El estado vivo debe consultarse en el
+Supervisor; no se mantiene aquí porque cambia entre releases.
 
-Verificado además localmente en este entorno de desarrollo (sin Docker
-disponible, complementario a la instalación real, no un sustituto):
+## 0.1.18
 
-- `pytest`, `ruff check .` y `mypy` en verde; `npm test` y `npm run build` del
-  frontend también en verde.
-- `scripts/check_public_safety.py` y el empaquetado (`scripts/package_addon.sh`
-  + `scripts/audit_addon_artifact.py`) pasan sin advertencias.
-- `scripts/validate_addon_options.py` acepta las opciones por defecto de
-  `config.yaml`.
-- Migraciones de Alembic aplicadas de punta a punta contra un `AW_DATA_DIR`
-  nuevo (7 revisiones, sin errores) y el servidor local respondiendo `200` en
-  `/api/v1/health` y `/api/v1/readiness` con la versión `0.1.16`.
-- La imagen base (`ghcr.io/home-assistant/base-python:3.12-alpine3.24` en
-  `build.yaml`/`Dockerfile`) es la oficial y vigente de Home Assistant.
-
-`smtp_enabled` está en `true` en la instalación real, con credenciales de
-Gmail configuradas — a diferencia del default seguro de `config.yaml`
-(`smtp_enabled: false`). Es una elección deliberada post-instalación, no un
-default del proyecto.
+- Corrige el snapshot de oportunidades de un perfil, que tomaba el último
+  publicado en todo el sistema en vez del propio: en cuanto corría otro
+  perfil, la vista dejaba de encontrar resultados y parecía quedarse cargando.
+- Corrige el conteo de "oportunidades nuevas" del mail de notificaciones, que
+  comparaba contra ese mismo snapshot equivocado e ignoraba el estado de
+  descarte, así que informaba como abiertas subastas ya descartadas.
+- Las oportunidades descartadas ya no vuelven a listarse como disponibles
+  tras una corrida nueva.
+- Agrega el botón para borrar una búsqueda guardada en la interfaz (el
+  endpoint ya existía, pero nada lo llamaba).
+- Elimina el parpadeo de "cargando" que se disparaba en cada cambio de
+  perfil, corrida o acción sobre una oportunidad.
 
 ## 0.1.17
 
