@@ -1,19 +1,33 @@
 version: 2
+# Monthly version updates, with minor and patch bumps batched into one PR per
+# ecosystem to keep notification noise low. Security updates are not affected
+# by these groups and still open as soon as an advisory is published.
 updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: pip
     directory: /auctionwatch
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: npm
     directory: /auctionwatch/web
     schedule:
-      interval: weekly
+      interval: monthly
     # Packages with mutual peer dependencies must move in the same PR,
-    # otherwise each bump fails `npm ci` on its own.
+    # otherwise each bump fails `npm ci` on its own. These groups come first
+    # so they take precedence over the minor-and-patch catch-all.
     groups:
       react:
         patterns:
@@ -25,3 +39,7 @@ updates:
         patterns:
           - "vite"
           - "@vitejs/*"
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
