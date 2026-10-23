@@ -12,3 +12,16 @@ updates:
     directory: /auctionwatch/web
     schedule:
       interval: weekly
+    # Packages with mutual peer dependencies must move in the same PR,
+    # otherwise each bump fails `npm ci` on its own.
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      vite:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
